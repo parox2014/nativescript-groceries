@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core'
-import {Http, Headers, Response} from '@angular/http'
+import {Headers, Response,Http} from '@angular/http'
 import {Observable} from 'rxjs/Rx'
 import 'rxjs/add/operator/do'
 import 'rxjs/add/operator/map'
@@ -13,7 +13,7 @@ export class UserService {
   
   }
   
-  register(user: User):Observable<any> {
+  register(user: User): Observable<any> {
     let headers = new Headers();
     
     headers.append('Content-Type', 'application/json');

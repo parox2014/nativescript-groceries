@@ -1,62 +1,73 @@
-import { Component ,OnInit} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {Router} from '@angular/router'
 import {User} from '../../shared/user/user'
 import {UserService} from '../../shared/user/user.service'
 
+// import {Page} from 'ui/page'
+
 @Component({
   selector: "login",
-  templateUrl:'pages/login/login.html' ,
-  styleUrls:["pages/login/login-common.css","pages/login/login.css"],
-  providers:[UserService]
+  templateUrl: 'pages/login/login.html',
+  styleUrls: ["pages/login/login-common.css", "pages/login/login.css"],
+  providers: [UserService]
 })
-export class LoginComponent implements OnInit{
-  user:User;
-  isLoggingIn:boolean=true;
-  constructor(private userService:UserService,private router:Router){
-    this.user=new User();
+export class LoginComponent implements OnInit {
+  user: User;
+  isLoggingIn: boolean = true;
+  
+  constructor(private userService: UserService, private router: Router) {
+    this.user = new User();
   }
-  ngOnInit(){
-    this.user.email='parox2014@gmail.com';
-    this.user.password='851128';
+  
+  ngOnInit() {
+    this.user.email = 'parox2014@gmail.com';
+    this.user.password = '851128';
+    // this.page.actionBarHidden=true;
+    // this.page.backgroundImage='res://bg_login';
   }
-  submit(){
-
-    if(this.isLoggingIn){
+  
+  submit() {
+    
+    if (this.isLoggingIn) {
       this.router.navigate(['/list']);
       //this.login();
-    }else {
+    } else {
       this.signUp();
     }
   }
-  login(){
- 
+  
+  login() {
+    
     this.userService.login(this.user)
       .subscribe(
-        ()=>{
+        () => {
           alert('login success');
-  
+          
           return this.router.navigate(['/list']);
         },
-        (error)=>alert('We could not find your account.')
+        (error) => alert('We could not find your account.')
       );
   }
-  signUp(){
+  
+  signUp() {
     this.userService.register(this.user)
-      .subscribe(()=>{
+      .subscribe(() => {
         alert('Your account was successfully created.');
         this.toggleDisplay();
-      },()=>{
+      }, () => {
         alert('Unfortunately we were unable to create your account.')
       });
   }
-  toggleDisplay(){
-    this.isLoggingIn=!this.isLoggingIn;
-  }
-  get submitText(){
-    return this.isLoggingIn?'Sign in':'Sign up';
+  
+  toggleDisplay() {
+    this.isLoggingIn = !this.isLoggingIn;
   }
   
-  get signUpText(){
-    return this.isLoggingIn?'Sign Up for Groceries':'Back to login';
+  get submitText() {
+    return this.isLoggingIn ? 'Sign in' : 'Sign up';
+  }
+  
+  get signUpText() {
+    return this.isLoggingIn ? 'Sign Up for Groceries' : 'Back to login';
   }
 }

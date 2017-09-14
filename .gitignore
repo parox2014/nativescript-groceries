@@ -64,3 +64,4 @@ typings/
 *.zip
 .tmp_backup/
 platforms/
+*.js
