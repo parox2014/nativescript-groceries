@@ -15,32 +15,32 @@ export class UserService {
   
   register(user: User): Observable<any> {
     let headers = new Headers();
-    
+    let url=Config.apiUrl + 'Users';
+    let params={
+      Username: user.email,
+      Email: user.email,
+      Password: user.password
+    };
+
     headers.append('Content-Type', 'application/json');
     
-    return this.http.post(Config.apiUrl + 'Users',
-      JSON.stringify({
-        Username: user.email,
-        Email: user.email,
-        Password: user.password
-      }), {headers})
+    return this.http.post(url,params, {headers})
       .catch(this.handleErrors)
   }
   
   login(user: User): Observable<any> {
     let headers = new Headers();
-    
-    headers.append('Content-type', 'application/json');
-    
-    return this.http.post(Config.apiUrl + 'oauth/token', JSON.stringify({
+    let params={
       username: user.email,
       password: user.password,
       grant_type: 'password'
-    }), {headers})
+    };
+
+    headers.append('Content-type', 'application/json');
+    
+    return this.http.post(Config.apiUrl + 'oauth/token', params, {headers})
       .map((response: Response) => response.json())
-      .do(data => {
-        Config.token = data.Result.access_token
-      })
+      .do(data => Config.token = data.Result.access_token)
       .catch(this.handleErrors);
   }
   

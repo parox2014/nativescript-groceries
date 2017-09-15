@@ -1,9 +1,10 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit,ElementRef,ViewChild} from "@angular/core";
 import {Router} from '@angular/router'
 import {User} from '../../shared/user/user'
 import {UserService} from '../../shared/user/user.service'
-
-// import {Page} from 'ui/page'
+import {Color} from 'color'
+import {View} from 'ui/core/view'
+import {Page} from 'ui/page'
 
 @Component({
   selector: "login",
@@ -14,23 +15,25 @@ import {UserService} from '../../shared/user/user.service'
 export class LoginComponent implements OnInit {
   user: User;
   isLoggingIn: boolean = true;
-  
-  constructor(private userService: UserService, private router: Router) {
+  @ViewChild('container') container:ElementRef;
+  constructor(private userService: UserService, private router: Router,private page:Page) {
     this.user = new User();
   }
   
   ngOnInit() {
     this.user.email = 'parox2014@gmail.com';
     this.user.password = '851128';
-    // this.page.actionBarHidden=true;
-    // this.page.backgroundImage='res://bg_login';
+    this.page.actionBarHidden=true;
+    this.page.backgroundImage='res://bg_login';
   }
   
   submit() {
-    
+    if(!this.user.isValidEmail){
+      return alert('Please enter a valid email address');
+    }
+
     if (this.isLoggingIn) {
-      this.router.navigate(['/list']);
-      //this.login();
+      this.login();
     } else {
       this.signUp();
     }
@@ -41,8 +44,6 @@ export class LoginComponent implements OnInit {
     this.userService.login(this.user)
       .subscribe(
         () => {
-          alert('login success');
-          
           return this.router.navigate(['/list']);
         },
         (error) => alert('We could not find your account.')
@@ -61,6 +62,11 @@ export class LoginComponent implements OnInit {
   
   toggleDisplay() {
     this.isLoggingIn = !this.isLoggingIn;
+    let container=<View>this.container.nativeElement;
+    container.animate({
+      backgroundColor:this.isLoggingIn?new Color('white'):new Color('#301217'),
+      duration:300
+    });
   }
   
   get submitText() {
